@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Automata.Infrastructure\Automata.Infrastructure.csproj" />
+    <ProjectReference Include="..\Automata.Application\Automata.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
