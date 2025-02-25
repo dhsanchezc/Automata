@@ -1,20 +1,24 @@
+using AutoMapper;
+using Automata.Application.Assets.Dtos;
 using Automata.Application.Assets.Queries;
-using Automata.Domain.Assets;
-using Automata.Infrastructure;
+using Automata.Application.Interfaces;
 using MediatR;
 
 namespace Automata.Application.Assets.Handlers;
 
-public class GetAssetByIdHandler : IRequestHandler<GetAssetByIdQuery, Asset?>
+public class GetAssetByIdHandler : IRequestHandler<GetAssetByIdQuery, AssetDto?>
 {
-    private readonly ApplicationDbContext _db;
+    private readonly IApplicationDbContext _db;
+    private readonly IMapper _mapper;
 
-    public GetAssetByIdHandler(ApplicationDbContext db)
+    public GetAssetByIdHandler(IApplicationDbContext db, IMapper mapper)
     {
         _db = db;
+        _mapper = mapper;
     }
-    public async Task<Asset?> Handle(GetAssetByIdQuery request, CancellationToken cancellationToken)
+    public async Task<AssetDto?> Handle(GetAssetByIdQuery request, CancellationToken cancellationToken)
     {
-        return await _db.Assets.FindAsync(request.Id);
+        var asset = await _db.Assets.FindAsync(request.Id);
+        return asset == null ? null : _mapper.Map<AssetDto>(asset);
     }
 }

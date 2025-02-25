@@ -2,4 +2,7 @@ using MediatR;
 
 namespace Automata.Application.Assets.Commands;
 
-public record CreateAssetCommand(string Name) : IRequest<int>;
+public record CreateAssetCommand(
+    string Name,
+    string Description
+    ) : IRequest<int>;

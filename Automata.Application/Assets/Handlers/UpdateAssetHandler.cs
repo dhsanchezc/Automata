@@ -1,15 +1,18 @@
+using AutoMapper;
 using Automata.Application.Assets.Commands;
-using Automata.Infrastructure;
+using Automata.Application.Interfaces;
 using MediatR;
 
 namespace Automata.Application.Assets.Handlers;
 
 public class UpdateAssetHandler : IRequestHandler<UpdateAssetCommand, bool>
 {
-    private readonly ApplicationDbContext _db;
-    public UpdateAssetHandler(ApplicationDbContext db)
+    private readonly IApplicationDbContext _db;
+    private readonly IMapper _mapper;
+    public UpdateAssetHandler(IApplicationDbContext db, IMapper mapper)
     {
         _db = db;
+        _mapper = mapper;
     }
 
     public async Task<bool> Handle(UpdateAssetCommand request, CancellationToken cancellationToken)
@@ -17,7 +20,8 @@ public class UpdateAssetHandler : IRequestHandler<UpdateAssetCommand, bool>
         var asset = await _db.Assets.FindAsync(request.Id);
         if (asset == null) return false;
 
-        asset.Name = request.Name;
+        _mapper.Map(request, asset);
+
         await _db.SaveChangesAsync(cancellationToken);
         return true;
     }

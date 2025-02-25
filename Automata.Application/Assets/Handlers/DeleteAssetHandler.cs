@@ -1,14 +1,13 @@
-using System;
 using Automata.Application.Assets.Commands;
-using Automata.Infrastructure;
+using Automata.Application.Interfaces;
 using MediatR;
 
 namespace Automata.Application.Assets.Handlers;
 
 public class DeleteAssetHandler : IRequestHandler<DeleteAssetCommand, bool>
 {
-    private readonly ApplicationDbContext _db;
-    public DeleteAssetHandler(ApplicationDbContext db)
+    private readonly IApplicationDbContext _db;
+    public DeleteAssetHandler(IApplicationDbContext db)
     {
         _db = db;
     }

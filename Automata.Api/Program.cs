@@ -1,19 +1,27 @@
 using System.Reflection;
 using Automata.Api.ApiHandlers;
+using Automata.Application.Interfaces;
 using Automata.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register DbContext with In-Memory Database
+// Register ApplicationDbContext with DI
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseInMemoryDatabase("AutomataDb"));
+
+// Register IApplicationDbContext abstraction
+builder.Services.AddScoped<IApplicationDbContext>(provider =>
+    provider.GetRequiredService<ApplicationDbContext>());
 
 // Register MediatR for Application Layer
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(Assembly.Load("Automata.Application"));
 });
+
+// Register AutoMapper
+builder.Services.AddAutoMapper(Assembly.Load("Automata.Application"));
 
 // Add minimal Swagger services
 builder.Services.AddEndpointsApiExplorer();

@@ -1,6 +1,6 @@
-using Automata.Domain.Assets;
+using Automata.Application.Assets.Dtos;
 using MediatR;
 
 namespace Automata.Application.Assets.Queries;
 
-public record GetAssetByIdQuery(int Id) : IRequest<Asset?>;
+public record GetAssetByIdQuery(int Id) : IRequest<AssetDto?>;
