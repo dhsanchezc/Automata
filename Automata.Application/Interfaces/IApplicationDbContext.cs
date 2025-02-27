@@ -1,4 +1,4 @@
-using Automata.Domain.Assets;
+using Automata.Domain.Aggregates.Assets;
 using Microsoft.EntityFrameworkCore; // TODO: Remove from Application layer (UoW)
 
 namespace Automata.Application.Interfaces;

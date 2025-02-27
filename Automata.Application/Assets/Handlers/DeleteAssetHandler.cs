@@ -1,24 +1,25 @@
 using Automata.Application.Assets.Commands;
 using Automata.Application.Interfaces;
+using Automata.Domain.Ports.Repositories;
 using MediatR;
 
 namespace Automata.Application.Assets.Handlers;
 
 public class DeleteAssetHandler : IRequestHandler<DeleteAssetCommand, bool>
 {
-    private readonly IApplicationDbContext _db;
-    public DeleteAssetHandler(IApplicationDbContext db)
+    private readonly IAssetRepository _assetRepository;
+    
+    public DeleteAssetHandler(IAssetRepository assetRepository)
     {
-        _db = db;
+        _assetRepository = assetRepository;
     }
 
     public async Task<bool> Handle(DeleteAssetCommand request, CancellationToken cancellationToken)
     {
-        var asset = await _db.Assets.FindAsync(request.Id);
+        var asset = await _assetRepository.GetByIdAsync(request.Id, cancellationToken);
         if (asset == null) return false;
 
-        _db.Assets.Remove(asset);
-        await _db.SaveChangesAsync(cancellationToken);
+        await _assetRepository.DeleteAsync(asset);
         return true;
     }
 }

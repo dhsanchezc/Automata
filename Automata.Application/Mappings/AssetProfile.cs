@@ -1,7 +1,7 @@
 using AutoMapper;
 using Automata.Application.Assets.Commands;
 using Automata.Application.Assets.Dtos;
-using Automata.Domain.Assets;
+using Automata.Domain.Aggregates.Assets;
 
 namespace Automata.Application.Mappings;
 

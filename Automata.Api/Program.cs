@@ -1,7 +1,9 @@
 using System.Reflection;
 using Automata.Api.ApiHandlers;
 using Automata.Application.Interfaces;
+using Automata.Domain.Ports.Repositories;
 using Automata.Infrastructure;
+using Automata.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,9 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register IApplicationDbContext abstraction
 builder.Services.AddScoped<IApplicationDbContext>(provider =>
     provider.GetRequiredService<ApplicationDbContext>());
+
+// Register Repository
+builder.Services.AddScoped<IAssetRepository, AssetRepository>();
 
 // Register MediatR for Application Layer
 builder.Services.AddMediatR(cfg =>

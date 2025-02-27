@@ -1,6 +1,5 @@
 using Automata.Application.Interfaces;
-using Automata.Domain.Assets;
-
+using Automata.Domain.Aggregates.Assets;
 using Microsoft.EntityFrameworkCore;
 
 namespace Automata.Infrastructure;
