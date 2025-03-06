@@ -16,10 +16,10 @@ public class GetAssetByIdHandler : IRequestHandler<GetAssetByIdQuery, AssetDto?>
         _assetRepository = assetRepository;
         _mapper = mapper;
     }
-    
+
     public async Task<AssetDto?> Handle(GetAssetByIdQuery request, CancellationToken cancellationToken)
     {
-        var asset = await _assetRepository.GetByIdAsync(request.Id, cancellationToken);
+        var asset = await _assetRepository.FindAsync(request.Id, cancellationToken);
         return asset == null ? null : _mapper.Map<AssetDto>(asset);
     }
 }

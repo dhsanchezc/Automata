@@ -10,7 +10,7 @@ public class CreateAssetHandler : IRequestHandler<CreateAssetCommand, int>
 {
     private readonly IAssetRepository _assetRepository;
     private readonly IMapper _mapper;
-    
+
     public CreateAssetHandler(IAssetRepository assetRepository, IMapper mapper)
     {
         _assetRepository = assetRepository;
@@ -20,7 +20,10 @@ public class CreateAssetHandler : IRequestHandler<CreateAssetCommand, int>
     public async Task<int> Handle(CreateAssetCommand request, CancellationToken cancellationToken)
     {
         var asset = _mapper.Map<Asset>(request);
-        await _assetRepository.AddAsync(asset);
+
+        _assetRepository.Add(asset);
+
+        await _assetRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
         return asset.Id;
     }
 }

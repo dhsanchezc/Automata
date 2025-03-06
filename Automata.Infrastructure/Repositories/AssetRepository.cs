@@ -1,46 +1,52 @@
-using Automata.Application.Interfaces;
 using Automata.Domain.Aggregates.Assets;
+using Automata.Domain.Common;
 using Automata.Domain.Ports.Repositories;
+using Automata.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace Automata.Infrastructure.Repositories;
 
 public class AssetRepository : IAssetRepository
 {
-    private readonly IApplicationDbContext _db;
+    private readonly ApplicationDbContext _context;
+    public IUnitOfWork UnitOfWork => _context;
 
-    public AssetRepository(IApplicationDbContext db)
+    public AssetRepository(ApplicationDbContext context)
     {
-        _db = db;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task AddAsync(Asset entity, CancellationToken cancellationToken = default)
+    public Asset Add(Asset asset)
     {
-        await _db.Assets.AddAsync(entity, cancellationToken);
-        await _db.SaveChangesAsync(cancellationToken);
+        return _context.Assets.Add(asset).Entity;
     }
 
-    public async Task DeleteAsync(Asset entity, CancellationToken cancellationToken = default)
+    public Asset Update(Asset asset)
     {
-        _db.Assets.Remove(entity);
-        await _db.SaveChangesAsync(cancellationToken);
+        return _context.Assets.Update(asset).Entity;
     }
 
-    public async Task<IEnumerable<Asset>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<Asset?> FindAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _db.Assets.AsNoTracking().ToListAsync();
+        return await _context.Assets.FindAsync(id, cancellationToken);
     }
 
-    public async Task<Asset> GetByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<Asset?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return await _db.Assets.FindAsync(new object[] { id }, cancellationToken)
-            ?? throw new KeyNotFoundException($"Asset with ID {id} not found.");
+        return await _context.Assets
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Name == name, cancellationToken);
     }
 
-
-    public async Task UpdateAsync(Asset entity, CancellationToken cancellationToken = default)
+    public async Task<List<Asset>> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        _db.Assets.Update(entity);
-        await _db.SaveChangesAsync(cancellationToken);
+        return await _context.Assets
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
+    }
+
+    public void Delete(Asset asset)
+    {
+        _context.Assets.Remove(asset);
     }
 }

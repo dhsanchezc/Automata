@@ -9,7 +9,7 @@ public class UpdateAssetHandler : IRequestHandler<UpdateAssetCommand, bool>
 {
     private readonly IAssetRepository _assetRepository;
     private readonly IMapper _mapper;
-    
+
     public UpdateAssetHandler(IAssetRepository assetRepository, IMapper mapper)
     {
         _assetRepository = assetRepository;
@@ -18,12 +18,13 @@ public class UpdateAssetHandler : IRequestHandler<UpdateAssetCommand, bool>
 
     public async Task<bool> Handle(UpdateAssetCommand request, CancellationToken cancellationToken)
     {
-        var asset = await _assetRepository.GetByIdAsync(request.Id, cancellationToken);
+        var asset = await _assetRepository.FindAsync(request.Id, cancellationToken);
         if (asset == null) return false;
 
         _mapper.Map(request, asset);
 
-        await _assetRepository.UpdateAsync(asset);
-        return true;
+        _assetRepository.Update(asset);
+
+        return await _assetRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

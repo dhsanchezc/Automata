@@ -1,8 +1,8 @@
 using System.Reflection;
 using Automata.Api.ApiHandlers;
-using Automata.Application.Interfaces;
+using Automata.Domain.Common;
 using Automata.Domain.Ports.Repositories;
-using Automata.Infrastructure;
+using Automata.Infrastructure.Persistence;
 using Automata.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,8 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseInMemoryDatabase("AutomataDb"));
 
-// Register IApplicationDbContext abstraction
-builder.Services.AddScoped<IApplicationDbContext>(provider =>
+// Register ApplicationDbContext as IUnitOfWork (since it implements IUnitOfWork)
+builder.Services.AddScoped<IUnitOfWork>(provider =>
     provider.GetRequiredService<ApplicationDbContext>());
 
 // Register Repository
