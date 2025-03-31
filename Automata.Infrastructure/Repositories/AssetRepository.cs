@@ -28,7 +28,9 @@ public class AssetRepository : IAssetRepository
 
     public async Task<Asset?> FindAsync(int id, CancellationToken cancellationToken = default)
     {
-        return await _context.Assets.FindAsync(id, cancellationToken);
+        return await _context.Assets
+            .Include(a => a.MaintenanceRecords)
+            .FirstOrDefaultAsync(a => a.Id == id, cancellationToken);
     }
 
     public async Task<Asset?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
@@ -41,6 +43,7 @@ public class AssetRepository : IAssetRepository
     public async Task<List<Asset>> GetAllAsync(CancellationToken cancellationToken = default)
     {
         return await _context.Assets
+            .Include(a => a.MaintenanceRecords)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }

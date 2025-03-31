@@ -6,4 +6,5 @@ public class AssetDto
     public string? Name { get; set; }
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
+    public List<MaintenanceRecordDto> MaintenanceRecords { get; set; } = new();
 }

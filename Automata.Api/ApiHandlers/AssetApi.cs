@@ -1,6 +1,7 @@
 using MediatR;
 using Automata.Application.Assets.Commands;
 using Automata.Application.Assets.Queries;
+using Automata.Application.Assets.Dtos;
 
 namespace Automata.Api.ApiHandlers;
 
@@ -35,5 +36,15 @@ public static class AssetApi
             var success = await mediator.Send(new DeleteAssetCommand(id));
             return success ? Results.NoContent() : Results.NotFound();
         });
+
+        endpoints.MapPost("/{id:int}/maintenance", async (
+            IMediator mediator,
+            int id,
+            MaintenanceRecordDto dto) =>
+            {
+                var command = new AddMaintenanceRecordCommand(id, dto);
+                var success = await mediator.Send(command);
+                return success ? Results.NoContent() : Results.NotFound();
+            });
     }
 }

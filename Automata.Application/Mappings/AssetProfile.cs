@@ -9,16 +9,26 @@ public class AssetProfile : Profile
 {
     public AssetProfile()
     {
-        // Domain <-> DTO mapping
-        CreateMap<Asset, AssetDto>().ReverseMap();
+        CreateMap<Asset, AssetDto>()
+            .ForMember(dest => dest.MaintenanceRecords, opt => opt.MapFrom(src => src.MaintenanceRecords));
 
-        // Map CreateAssetCommand -> Asset
         CreateMap<CreateAssetCommand, Asset>()
             .ForMember(dest => dest.Id, opt => opt.Ignore()); // ID is auto-generated
 
-        // Map UpdateAssetCommand -> Asset
         CreateMap<UpdateAssetCommand, Asset>()
             .ForMember(dest => dest.UpdatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
-            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore()); // Preserve original CreatedAt
+            .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+            .ForMember(dest => dest.MaintenanceRecords, opt => opt.Ignore());
+
+        CreateMap<MaintenanceRecord, MaintenanceRecordDto>();
+
+        CreateMap<MaintenanceRecordDto, MaintenanceRecord>()
+            .ConstructUsing(dto => new MaintenanceRecord(
+                dto.ScheduledDate,
+                Enum.Parse<MaintenanceType>(dto.Type, true),
+                dto.Technician,
+                dto.Notes
+            ));
+
     }
 }
