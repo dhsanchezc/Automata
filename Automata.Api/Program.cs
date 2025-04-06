@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register ApplicationDbContext with DI
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseInMemoryDatabase("AutomataDb"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Register ApplicationDbContext as IUnitOfWork (since it implements IUnitOfWork)
 builder.Services.AddScoped<IUnitOfWork>(provider =>
