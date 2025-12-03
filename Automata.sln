@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automata.Api.Tests", "Autom
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automata.Domain.Tests", "Automata.Domain.Tests\Automata.Domain.Tests.csproj", "{02976DE7-2779-4352-A461-128A7809112A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Automata.Application.Tests", "Automata.Application.Tests\Automata.Application.Tests.csproj", "{5D349AE7-5CC4-47AA-A0CA-888D0C5B3ECB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,5 +50,9 @@ Global
 		{02976DE7-2779-4352-A461-128A7809112A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02976DE7-2779-4352-A461-128A7809112A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02976DE7-2779-4352-A461-128A7809112A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D349AE7-5CC4-47AA-A0CA-888D0C5B3ECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D349AE7-5CC4-47AA-A0CA-888D0C5B3ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D349AE7-5CC4-47AA-A0CA-888D0C5B3ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D349AE7-5CC4-47AA-A0CA-888D0C5B3ECB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
