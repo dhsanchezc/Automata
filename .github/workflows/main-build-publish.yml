@@ -43,7 +43,7 @@ jobs:
       - name: Build and push API image to GHCR
         uses: docker/build-push-action@v5
         with:
-          context: ./Automata.Api
+          context: .
           file: ./Automata.Api/Dockerfile
           push: true
           tags: |
