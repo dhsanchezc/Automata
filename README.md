@@ -42,9 +42,13 @@ az containerapp registry set \
   --password <GHCR_TOKEN>
 ```
 
-3. Add GitHub Actions secret `AZURE_CREDENTIALS` using the JSON from:
+3. Add GitHub Actions secret `AZURE_CREDENTIALS` using the JSON from (scope to your RG):
 ```
-az ad sp create-for-rbac --sdk-auth
+az ad sp create-for-rbac \
+  --name automata-gh-actions \
+  --role Contributor \
+  --scopes /subscriptions/<SUBSCRIPTION_ID>/resourceGroups/automata-rg \
+  --sdk-auth
 ```
 
 After that, pushes to `main` build/test, push the image to GHCR, and update the Container App via the workflow in `.github/workflows/main-build-publish.yml`.
