@@ -16,3 +16,35 @@ Build and run the API container image:
 docker build -t ghcr.io/github-username/automata-api -f Automata.Api/Dockerfile .
 docker run -p 8080:8080 ghcr.io/github-username/automata-api
 ```
+
+## Deploy to Azure Container Apps (manual setup)
+One-time setup to enable the GitHub Actions deploy job:
+
+1. Create the Container App (portal or CLI). Example:
+```
+az containerapp up \
+  --name automata-api \
+  --resource-group automata-rg \
+  --location brazilsouth \
+  --environment automata-env \
+  --image mcr.microsoft.com/k8se/quickstart:latest \
+  --target-port 8080 \
+  --ingress external
+```
+
+2. Store GHCR pull credentials on the app (private images):
+```
+az containerapp registry set \
+  --name automata-api \
+  --resource-group automata-rg \
+  --server ghcr.io \
+  --username <GHCR_USERNAME> \
+  --password <GHCR_TOKEN>
+```
+
+3. Add GitHub Actions secret `AZURE_CREDENTIALS` using the JSON from:
+```
+az ad sp create-for-rbac --sdk-auth
+```
+
+After that, pushes to `main` build/test, push the image to GHCR, and update the Container App via the workflow in `.github/workflows/main-build-publish.yml`.
