@@ -49,3 +49,23 @@ jobs:
           tags: |
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
             ${{ env.IMAGE_NAME }}:latest
+
+  deploy_to_aca:
+    needs: publish_image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      IMAGE_TO_DEPLOY: ghcr.io/${{ github.repository_owner }}/automata-api:${{ github.sha }}
+      ACA_RESOURCE_GROUP: automata-rg
+      ACA_ENVIRONMENT: automata-env
+      ACA_APP_NAME: automata-api
+    steps:
+      - name: Deploy to Azure Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          resourceGroup: ${{ env.ACA_RESOURCE_GROUP }}
+          containerAppName: ${{ env.ACA_APP_NAME }}
+          containerAppEnvironment: ${{ env.ACA_ENVIRONMENT }}
+          imageToDeploy: ${{ env.IMAGE_TO_DEPLOY }}
