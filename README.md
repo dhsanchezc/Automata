@@ -58,6 +58,18 @@ az ad sp create-for-rbac \
 
 After that, pushes to `main` build/test, push the image to GHCR, and update the Container App via the workflow in `.github/workflows/main-build-publish.yml`.
 
+### Configure CORS for the frontend (Azure Container Apps)
+Set the allowed origin(s) so browsers can call the API:
+
+```
+az containerapp update \
+  --name automata-api \
+  --resource-group automata-rg \
+  --set-env-vars Cors__AllowedOrigins__0=https://app.example.com
+```
+
+Add more origins by incrementing the index (`Cors__AllowedOrigins__1`, etc.). Use the exact origin and no trailing slash.
+
 ### Azure Database for PostgreSQL (recommended)
 Use Azure Database for PostgreSQL Flexible Server for a managed database:
 
